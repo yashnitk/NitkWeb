@@ -34,6 +34,14 @@
       padding: 0;
     }
 
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: "Segoe UI", Arial, sans-serif;
       background: var(--bg);
@@ -41,10 +49,18 @@
       line-height: 1.6;
     }
 
+    .dashboard-root {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
     .hero {
       background: linear-gradient(135deg, #002147, #003366 45%, #0f766e);
       color: white;
-      padding: 48px 6vw 42px;
+      margin: 0;
+      padding: 48px max(22px, 6vw) 42px;
       position: relative;
       overflow: hidden;
     }
@@ -66,9 +82,65 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 30px;
+      grid-template-columns: 1.2fr 0.5fr 0.3fr;
+      gap: 24px;
       align-items: center;
+    }
+
+    .profile-photo {
+      justify-self: end;
+    }
+
+    .profile-photo img {
+      width: 190px;
+      height: 190px;
+      object-fit: cover;
+      object-position: center 18%;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.6);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      background: white;
+      display: block;
+    }
+
+    .photo-upload-panel {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .photo-upload-btn,
+    .photo-reset-btn {
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.14);
+      color: white;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    .photo-upload-btn input {
+      display: none;
+    }
+
+    .photo-reset-btn {
+      font-family: inherit;
+    }
+
+    @media (max-width: 900px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .profile-photo {
+        justify-self: center;
+        margin-top: 10px;
+      }
     }
 
     .eyebrow {
@@ -109,71 +181,12 @@
       font-size: 13px;
     }
 
-    .hero-side {
-      display: grid;
-      gap: 18px;
-    }
-
-    .photo-card,
     .profile-card {
       background: rgba(255,255,255,0.12);
       border: 1px solid rgba(255,255,255,0.22);
       border-radius: 24px;
       padding: 24px;
       backdrop-filter: blur(12px);
-    }
-
-    .photo-card {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .profile-photo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid rgba(255,255,255,0.35);
-      background: rgba(255,255,255,0.15);
-      flex-shrink: 0;
-    }
-
-    .photo-actions {
-      display: grid;
-      gap: 10px;
-    }
-
-    .photo-label {
-      font-size: 13px;
-      color: #e5e7eb;
-    }
-
-    .upload-btn,
-    .clear-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 14px;
-      cursor: pointer;
-      width: fit-content;
-    }
-
-    .upload-btn {
-      display: inline-block;
-      background: rgba(255,255,255,0.18);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.24);
-    }
-
-    .upload-btn input {
-      display: none;
-    }
-
-    .clear-btn {
-      background: rgba(15, 23, 42, 0.22);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.18);
     }
 
     .profile-card h3 {
@@ -227,6 +240,11 @@
     .metric-label {
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .missing {
+      color: var(--danger);
+      font-weight: 700;
     }
 
     .grid-main {
@@ -373,12 +391,6 @@
       max-height: 310px;
     }
 
-    @media (max-width: 1100px) {
-      .metrics {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
     @media (max-width: 900px) {
       .hero-content, .grid-main, .metrics {
         grid-template-columns: 1fr;
@@ -389,17 +401,276 @@
       .container {
         margin-top: 20px;
       }
-      .photo-card {
-        flex-direction: column;
-        text-align: center;
+    }
+
+    .publication-master-slide {
+      background: linear-gradient(135deg, #ffffff, #eef7ff);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
+      aspect-ratio: 16 / 9;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .slide-kicker {
+      color: var(--secondary);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.05;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .slide-subtitle {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+
+    .pub-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pub-pill {
+      background: #e0f2fe;
+      color: #075985;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .impact-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .impact-tile {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .impact-tile strong {
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .venue-strip {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .venue-box {
+      background: #f8fafc;
+      border-left: 4px solid var(--accent);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .publication-master-slide {
+        aspect-ratio: auto;
+        grid-template-columns: 1fr;
       }
-      .photo-actions {
-        justify-items: center;
+      .venue-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .timeseries-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .timeseries-controls input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .timeseries-controls button,
+    .file-label {
+      border: none;
+      background: var(--primary);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .file-label input {
+      display: none;
+    }
+
+    .hint-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    .csv-format {
+      background: #f8fafc;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      color: #334155;
+      margin-top: 12px;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 900px) {
+      .timeseries-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .shine-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shine-card::after {
+      content: "";
+      position: absolute;
+      top: -60%;
+      left: -40%;
+      width: 60%;
+      height: 220%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      transform: rotate(25deg);
+      animation: shine 7s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -70%; }
+      35% { left: 120%; }
+      100% { left: 120%; }
+    }
+
+    .contribution-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .contribution-card {
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+    }
+
+    .contribution-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .contribution-card h3 {
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .recruitment-banner {
+      background: radial-gradient(circle at top left, rgba(245,158,11,0.25), transparent 28%), linear-gradient(135deg, #003366, #0f766e);
+      color: white;
+      border-radius: 28px;
+      padding: 34px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: center;
+      box-shadow: 0 18px 45px rgba(0, 51, 102, 0.25);
+      margin-bottom: 22px;
+    }
+
+    .recruitment-banner h2 {
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.05;
+      margin-bottom: 10px;
+    }
+
+    .recruitment-banner p {
+      color: #e0f2fe;
+      font-size: 16px;
+    }
+
+    .recruitment-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .recruitment-tags span {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .metric-card:hover,
+    .section-card:hover,
+    .contribution-card:hover,
+    .impact-tile:hover,
+    .research-item:hover,
+    .project:hover {
+      transform: translateY(-2px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.10);
+    }
+
+    @media (max-width: 900px) {
+      .contribution-grid,
+      .recruitment-banner {
+        grid-template-columns: 1fr;
+      }
+      .recruitment-tags {
+        justify-content: flex-start;
       }
     }
   </style>
 </head>
 <body>
+<div class="dashboard-root">
   <header class="hero">
     <div class="hero-content">
       <div>
@@ -414,52 +685,62 @@
           <span class="tag">Renewable Forecasting</span>
         </div>
       </div>
-      <div class="hero-side">
-        <aside class="photo-card">
-          <img id="profilePhoto" class="profile-photo" src="profile-photo.jpg" alt="Dr. Yashwant Kashyap profile photo" />
-          <div class="photo-actions">
-            <div class="photo-label">Upload a profile photo for this browser.</div>
-            <label class="upload-btn">
-              Upload Photo
-              <input type="file" accept="image/*" onchange="changePhoto(event)" />
-            </label>
-            <button class="clear-btn" type="button" onclick="resetPhoto()">Reset Photo</button>
-          </div>
-        </aside>
-        <aside class="profile-card">
-          <h3>Profile Links</h3>
-          <p>Email: yashwant.kashyap@nitk.edu.in</p>
-          <p>Mobile: +91-8219881422</p>
-          <p><a href="https://scholar.google.com/citations?user=UGUSvEYAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar Profile</a></p>
-          <p><a href="https://orcid.org/0000-0002-8425-7430" target="_blank" rel="noopener noreferrer">ORCID: 0000-0002-8425-7430</a></p>
-          <p><a href="https://www.scopus.com/authid/detail.uri?authorId=56650962000" target="_blank" rel="noopener noreferrer">Scopus Author ID: 56650962000</a></p>
-          <p>Date of Joining: 28 May 2018</p>
-        </aside>
+      <aside class="profile-card">
+        <h3>Profile Links</h3>
+        <p>Mobile: +91-8219881422</p>
+        <p><a href="https://scholar.google.com/citations?user=UGUSvEYAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar Profile</a></p>
+        <p><a href="https://orcid.org/0000-0002-8425-7430" target="_blank" rel="noopener noreferrer">ORCID: 0000-0002-8425-7430</a></p>
+        <p><a href="https://www.scopus.com/authid/detail.uri?authorId=56650962000" target="_blank" rel="noopener noreferrer">Scopus Author ID: 56650962000</a></p>
+        <p>Date of Joining: 28 May 2018</p>
+      </aside>
+      <div class="profile-photo">
+        <img id="profilePhotoImg" src="profile-photo.jpg" alt="Dr. Yashwant Kashyap" />
+        <div class="photo-upload-panel">
+          <label class="photo-upload-btn">
+            Upload Photo
+            <input id="profilePhotoUpload" type="file" accept="image/*" onchange="updateProfilePhoto(event)" />
+          </label>
+          <button class="photo-reset-btn" type="button" onclick="resetProfilePhoto()">Reset Photo</button>
+        </div>
       </div>
     </div>
   </header>
 
   <main class="container">
     <section class="metrics">
-      <div class="metric-card">
-        <div class="metric-value" id="totalPublications">42</div>
+      <div class="metric-card shine-card">
+        <div class="metric-value" id="totalPublications">48</div>
         <div class="metric-label">Research Works / Publications</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-value" id="totalCitations">595</div>
+      <div class="metric-card shine-card">
+        <div class="metric-value" id="totalCitations">650+</div>
         <div class="metric-label">Google Scholar Citations</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-value" id="hIndex">12</div>
+      <div class="metric-card shine-card">
+        <div class="metric-value" id="hIndex">13</div>
         <div class="metric-label">Google Scholar h-index</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-value" id="i10Index">14</div>
+      <div class="metric-card shine-card">
+        <div class="metric-value" id="i10Index">16</div>
         <div class="metric-label">Google Scholar i10-index</div>
       </div>
-      <div class="metric-card">
+      <div class="metric-card shine-card">
         <div class="metric-value" id="totalFunding">₹0.95 Cr</div>
         <div class="metric-label">Total Research Funding</div>
+      </div>
+    </section>
+
+    <section class="recruitment-banner">
+      <div>
+        <h2>Research Opportunities & Collaboration</h2>
+        <p>Open to motivated Ph.D./M.Tech students, interdisciplinary academic collaborations, and industry partnerships in AI-enabled energy systems, airborne wind energy, smart grids and electric mobility.</p>
+      </div>
+      <div class="recruitment-tags">
+        <span>Ph.D. Guidance</span>
+        <span>Industry Projects</span>
+        <span>DST/SERB</span>
+        <span>AI + Energy</span>
+        <span>EV Systems</span>
       </div>
     </section>
 
@@ -468,6 +749,27 @@
         <article class="section-card">
           <h2 class="section-title">Research Identity</h2>
           <p>Dr. Kashyap’s work lies at the intersection of artificial intelligence, renewable energy systems, smart grids, and airborne wind energy. His research integrates machine learning, remote sensing, numerical modelling, real-time simulation, and prototype-based validation for intelligent and sustainable energy systems.</p>
+        </article>
+
+        <article class="section-card">
+          <h2 class="section-title">Top Research Contributions</h2>
+          <div class="contribution-grid">
+            <div class="contribution-card">
+              <div class="contribution-icon">☀️</div>
+              <h3>AI-based Solar Forecasting</h3>
+              <p>Machine learning, cloud motion vectors and remote sensing for solar energy nowcasting and PV planning.</p>
+            </div>
+            <div class="contribution-card">
+              <div class="contribution-icon">🪁</div>
+              <h3>Airborne Wind Energy</h3>
+              <p>Kite-based wind power systems, real-time emulation and flight-control oriented energy conversion research.</p>
+            </div>
+            <div class="contribution-card">
+              <div class="contribution-icon">🔋</div>
+              <h3>EV & Storage Systems</h3>
+              <p>Hybrid energy management, battery systems, BMS concepts and intelligent power allocation for EVs.</p>
+            </div>
+          </div>
         </article>
 
         <article class="section-card">
@@ -487,10 +789,38 @@
         </article>
 
         <article class="section-card">
+          <h2 class="section-title">Publication Master Slide</h2>
+          <div class="publication-master-slide">
+            <div>
+              <div class="slide-kicker">Research Publication Identity</div>
+              <div class="slide-title">AI-enabled Renewable Energy, Solar Analytics & Airborne Wind Systems</div>
+              <p class="slide-subtitle">A compact one-slide view for webpage, presentation, proposal and academic dossier use.</p>
+              <div class="pub-pill-row">
+                <span class="pub-pill">Applied Energy</span>
+                <span class="pub-pill">Remote Sensing</span>
+                <span class="pub-pill">Energies</span>
+                <span class="pub-pill">Energy Storage</span>
+                <span class="pub-pill">RSER</span>
+              </div>
+              <div class="venue-strip">
+                <div class="venue-box"><strong>2024</strong><br/>Applied Energy papers on solar forecasting and PV planning</div>
+                <div class="venue-box"><strong>2023</strong><br/>Airborne wind, EV energy management and remote sensing publications</div>
+              </div>
+            </div>
+            <div class="impact-stack">
+              <div class="impact-tile"><strong>48</strong><br/>Research works / publications</div>
+              <div class="impact-tile"><strong>650+</strong><br/>Google Scholar citations</div>
+              <div class="impact-tile"><strong>h-index 13</strong><br/>i10-index 16</div>
+              <div class="impact-tile"><strong>Core Niche</strong><br/>AI + Renewable Energy + AWES + EV Systems</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="section-card">
           <h2 class="section-title">Selected Publications</h2>
           <div id="publicationList">
-            <div class="publication"><strong>Multi-Layer Cloud Motion Vector Forecasting for Solar Energy Applications</strong><br/>Applied Energy, 2024.</div>
-            <div class="publication"><strong>Ray-Tracing Modeling for Urban Photovoltaic Energy Planning and Management</strong><br/>Applied Energy, 2024.</div>
+            <div class="publication"><strong>Multi-Layer Cloud Motion Vector Forecasting for Solar Energy Applications</strong><br/>Applied Energy, 2024. <em>(High Impact)</em></div>
+            <div class="publication"><strong>Ray-Tracing Modeling for Urban Photovoltaic Energy Planning and Management</strong><br/>Applied Energy, 2024. <em>(High Impact)</em></div>
             <div class="publication"><strong>Laboratory-Scale Airborne Wind Energy Conversion Emulator Using OPAL-RT</strong><br/>Energies, 2023.</div>
             <div class="publication"><strong>Exploring the Potential of Kite-Based Wind Power Generation</strong><br/>Energies, 2023.</div>
             <div class="publication"><strong>Rooftop Photovoltaic Energy Production Estimations in India Using Remotely Sensed Data and Methods</strong><br/>Remote Sensing, 2023.</div>
@@ -503,7 +833,7 @@
           <h2 class="section-title">Sponsored Projects</h2>
           <div class="project-list">
             <div class="project"><h4>DST-SERB</h4><p>Laboratory Scale Demonstration of a Kite-Based Wind Power System</p><p>Role: Co-PI | Duration: 02/2022–02/2025</p></div>
-            <div class="project"><h4>CPRI</h4><p>Development and Validation of a Solar Energy Nowcasting System in India in support to local TSO/DSO</p><p>Funding included in total research portfolio: ₹1 crore</p></div>
+            <div class="project"><h4>CPRI</h4><p>Development and Validation of a Solar Energy Nowcasting System in India in support to local TSO/DSO</p><p>Role: Lien-PI | Duration: 12/2020–12/2022</p></div>
             <div class="project"><h4>DHI</h4><p>Development of Brushless DC Motor for Automotive Power Window</p><p>Role: Lien-PI | Duration: 12/2020–12/2022</p></div>
             <div class="project"><h4>CAMP-81</h4><p>High Altitude Wind Power Generator Using Parafoil Kites</p><p>Role: PI | Duration: 11/2018–11/2020</p></div>
           </div>
@@ -513,8 +843,10 @@
           <h2 class="section-title">Research Guidance</h2>
           <table class="mini-table">
             <tr><th>Category</th><th>Status</th></tr>
-            <tr><td>Ph.D.</td><td>Ongoing: 3 — Chaithrasree C. N., Anil Kumar, Pankaj Kumar</td></tr>
-            <tr><td>Ph.D.</td><td>Completed: 2 — Roystan Vijay Castelino, Vishnu Sidharthan P.</td></tr>
+            <tr><td>Ph.D.</td><td>Ongoing: 2 — Chaithrasree C. N., Pankaj Kumar</td></tr>
+            <tr><td>Ph.D.</td><td>Completed: 3 — Roystan Vijay Castelino, Vishnu Sidharthan P., Anil Kumar</td></tr>
+            <tr><td>M.Tech</td><td>Completed / Ongoing Projects: 8+</td></tr>
+            <tr><td>B.Tech</td><td>Major & Minor Projects Guided: 35+</td></tr>
             <tr><td>M.Tech / B.Tech</td><td>Projects in AI-enabled forecasting, EV energy management, airborne wind energy and renewable energy analytics</td></tr>
           </table>
         </article>
@@ -526,17 +858,86 @@
             <div class="timeline-item"><strong>2020</strong><br/>Best Paper Award, NIT Raipur.</div>
             <div class="timeline-item"><strong>2022–2025</strong><br/>Kite-based wind power research under sponsored project.</div>
             <div class="timeline-item"><strong>2023</strong><br/>Major publications in Energies, Remote Sensing and Energy Storage.</div>
+            <div class="timeline-item"><strong>2024–2026</strong><br/>High-impact Applied Energy publications and AI-driven renewable forecasting research expansion.</div>
           </div>
         </article>
       </aside>
     </section>
 
     <section class="section-card">
+      <h2 class="section-title">Real-Time / CSV Time-Series Data</h2>
+      <p style="margin-bottom:14px; color: var(--muted);">Use this space to plot real-time or periodically updated research data from Google Drive, Google Sheets CSV export, local CSV, sensor logs, solar forecasting output, EV/BMS logs, or experimental time-series datasets.</p>
+
+      <div class="timeseries-controls">
+        <input id="csvUrlInput" type="text" placeholder="Paste Google Sheet CSV export URL / Google Drive CSV direct link here" />
+        <button onclick="loadCsvFromUrl()">Load CSV</button>
+      </div>
+
+      <div class="timeseries-controls">
+        <label class="file-label">
+          Upload Local CSV
+          <input id="csvFileInput" type="file" accept=".csv" onchange="loadCsvFromFile(event)" />
+        </label>
+        <button onclick="useSampleTimeSeries()">Show Sample Data</button>
+      </div>
+
+      <canvas id="timeSeriesChart"></canvas>
+
+      <div class="hint-box">
+        Recommended Google workflow: Google Sheet → File → Share/Publish CSV → paste CSV URL here. For Google Drive files, set sharing to “Anyone with the link” and use a direct-download/export CSV link.
+      </div>
+
+      <div class="csv-format">Required CSV format:<br/>time,value<br/>2026-01-01 10:00,42.5<br/>2026-01-01 10:05,43.1<br/>2026-01-01 10:10,44.0</div>
+    </section>
+
+    <section class="section-card">
       <h2 class="section-title">Courses Taught</h2>
       <table class="mini-table">
         <tr><th>Level</th><th>Courses</th></tr>
-        <tr><td>UG/PG</td><td>Digital Electronic Circuits, Digital System Design, Neural Networks and Applications, Deep Neural Networks and Applications, Soft Computing and Applications, Introduction to Machine Learning</td></tr>
+        <tr><td>UG / PG</td><td>
+EE276 – Digital Electronic Circuits; 
+EE311 – Digital System Design; 
+EE335 – Digital System Design Laboratory; 
+EE265 – Power Transmission and Distribution; 
+EE319 – Neural Networks and Applications; 
+EE432 – Introduction to Machine Learning; 
+EE403 – Deep Neural Networks and Applications; 
+EE404 – Soft Computing and Applications; 
+EE918 – Selected Topics in Alternative Energy Sources; 
+EE853 – Renewable Energy Systems; 
+EE917 – Electric Vehicle
+</td></tr>
       </table>
+    </section>
+
+    <section class="section-card">
+      <h2 class="section-title">Achievements & Professional Activities</h2>
+
+      <div class="research-map" style="margin-bottom:20px;">
+        <div class="research-item">
+          <strong>🏆 Key Highlights</strong>
+          <ul style="margin-top:8px; padding-left:16px;">
+            <li>Best Paper Award – NIT Raipur (2020)</li>
+            <li>DAAD International Fellowship – Germany (2015)</li>
+            <li>IEEE Transactions Reviewer</li>
+          </ul>
+        </div>
+        <div class="research-item">
+          <strong>🌍 Global & Academic Strength</strong>
+          <ul style="margin-top:8px; padding-left:16px;">
+            <li>MHRD PhD Fellowship</li>
+            <li>GATE Qualified (2005)</li>
+            <li>International Research Exposure</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="impact-stack">
+        <div class="impact-tile"><strong>Administration</strong><br/>DUGC Secretary | Block Warden | Faculty Advisor</div>
+        <div class="impact-tile"><strong>Coordination</strong><br/>Timetable | Software License | e-Yantra Robotics</div>
+        <div class="impact-tile"><strong>Professional Bodies</strong><br/>IEEE, PES, GRSS, ISES, ASES, WWEA</div>
+        <div class="impact-tile"><strong>Outreach</strong><br/>IIT Bombay Workshop | TEQIP-III Training | Reviewer</div>
+      </div>
     </section>
 
     <section class="cta">
@@ -552,19 +953,18 @@
   <script>
     const DATA_URL = 'PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
     const DEFAULT_PROFILE_PHOTO = 'profile-photo.jpg';
-    const PROFILE_PHOTO_STORAGE_KEY = 'profilePhoto';
 
     const fallbackData = {
       metrics: {
-        publications: 42,
-        citations: 595,
-        hIndex: 12,
-        i10Index: 14,
+        publications: 48,
+        citations: '650+',
+        hIndex: 13,
+        i10Index: 16,
         funding: '₹0.95 Cr'
       },
       publicationTrend: {
-        labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
-        values: [2, 3, 3, 4, 8, 10, 4, 2]
+        labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'],
+        values: [2, 3, 3, 4, 8, 12, 10, 5, 4]
       },
       publications: [
         { title: 'Multi-Layer Cloud Motion Vector Forecasting for Solar Energy Applications', venue: 'Applied Energy', year: '2024' },
@@ -576,36 +976,51 @@
     };
 
     let publicationChart;
+    let timeSeriesChart;
+
+    function safeSetText(id, value) {
+      const el = document.getElementById(id);
+      if (el && value !== undefined && value !== null) el.textContent = value;
+    }
 
     function updateMetrics(data) {
-      document.getElementById('totalPublications').textContent = data.metrics.publications;
-      document.getElementById('totalCitations').textContent = data.metrics.citations;
-      document.getElementById('hIndex').textContent = data.metrics.hIndex;
-      document.getElementById('i10Index').textContent = data.metrics.i10Index;
-      document.getElementById('totalFunding').textContent = data.metrics.funding;
+      if (!data || !data.metrics) return;
+      safeSetText('totalPublications', data.metrics.publications);
+      safeSetText('totalCitations', data.metrics.citations);
+      safeSetText('hIndex', data.metrics.hIndex);
+      safeSetText('i10Index', data.metrics.i10Index);
+      safeSetText('totalFunding', data.metrics.funding);
+
+      if (data.profilePhotoUrl) {
+        const img = document.getElementById('profilePhotoImg');
+        if (img) img.src = data.profilePhotoUrl;
+      }
     }
 
     function updatePublicationList(data) {
       const container = document.getElementById('publicationList');
+      if (!container || !data || !Array.isArray(data.publications)) return;
       container.innerHTML = '';
       data.publications.forEach(pub => {
         const item = document.createElement('div');
         item.className = 'publication';
-        item.innerHTML = `<strong>${pub.title}</strong><br/>${pub.venue}, ${pub.year}.`;
+        item.innerHTML = `<strong>${pub.title || ''}</strong><br/>${pub.venue || ''}, ${pub.year || ''}.`;
         container.appendChild(item);
       });
     }
 
     function renderChart(data) {
-      const ctx = document.getElementById('publicationChart').getContext('2d');
+      const canvas = document.getElementById('publicationChart');
+      if (!canvas || !data || !data.publicationTrend) return;
+      const ctx = canvas.getContext('2d');
       if (publicationChart) publicationChart.destroy();
       publicationChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: data.publicationTrend.labels,
+          labels: data.publicationTrend.labels || [],
           datasets: [{
             label: 'Publications per Year',
-            data: data.publicationTrend.values,
+            data: data.publicationTrend.values || [],
             borderColor: '#003366',
             backgroundColor: 'rgba(15, 118, 110, 0.12)',
             fill: true,
@@ -616,43 +1031,17 @@
         },
         options: {
           responsive: true,
-          plugins: {
-            legend: { display: true },
-            tooltip: { enabled: true }
-          },
-          scales: {
-            y: { beginAtZero: true, ticks: { precision: 0 } }
-          }
+          plugins: { legend: { display: true }, tooltip: { enabled: true } },
+          scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
         }
       });
     }
 
-    function applySavedPhoto() {
-      const savedPhoto = localStorage.getItem(PROFILE_PHOTO_STORAGE_KEY);
-      const photoElement = document.getElementById('profilePhoto');
-      photoElement.src = savedPhoto || DEFAULT_PROFILE_PHOTO;
-    }
-
-    function changePhoto(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(loadEvent) {
-        const dataUrl = loadEvent.target.result;
-        document.getElementById('profilePhoto').src = dataUrl;
-        localStorage.setItem(PROFILE_PHOTO_STORAGE_KEY, dataUrl);
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function resetPhoto() {
-      localStorage.removeItem(PROFILE_PHOTO_STORAGE_KEY);
-      document.getElementById('profilePhoto').src = DEFAULT_PROFILE_PHOTO;
-    }
-
     async function loadDashboardData() {
       try {
+        if (!DATA_URL || DATA_URL.includes('PASTE_GOOGLE_APPS_SCRIPT')) {
+          throw new Error('Apps Script URL not configured');
+        }
         const response = await fetch(DATA_URL, { cache: 'no-store' });
         if (!response.ok) throw new Error('Data file not found');
         return await response.json();
@@ -662,15 +1051,138 @@
       }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      applySavedPhoto();
+    function updateProfilePhoto(event) {
+      const file = event && event.target && event.target.files ? event.target.files[0] : null;
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload a valid image file.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = e => {
+        const imageData = e.target.result;
+        const img = document.getElementById('profilePhotoImg');
+        if (img) img.src = imageData;
+        try { localStorage.setItem('ykProfilePhoto', imageData); } catch (err) { console.warn('Photo could not be saved locally:', err); }
+      };
+      reader.readAsDataURL(file);
+    }
 
+    function resetProfilePhoto() {
+      try { localStorage.removeItem('ykProfilePhoto'); } catch (err) { console.warn(err); }
+      const img = document.getElementById('profilePhotoImg');
+      if (img) img.src = DEFAULT_PROFILE_PHOTO;
+      const input = document.getElementById('profilePhotoUpload');
+      if (input) input.value = '';
+    }
+
+    function loadSavedProfilePhoto() {
+      try {
+        const savedPhoto = localStorage.getItem('ykProfilePhoto');
+        if (savedPhoto) {
+          const img = document.getElementById('profilePhotoImg');
+          if (img) img.src = savedPhoto;
+        }
+      } catch (err) {
+        console.warn('Saved photo unavailable:', err);
+      }
+    }
+
+    function parseCsvText(csvText) {
+      const lines = String(csvText || '').trim().split(/\r?\n/).filter(Boolean);
+      const rows = lines.slice(1).map(line => {
+        const cols = line.split(',').map(x => x.trim());
+        return { time: cols[0], value: Number(cols[1]) };
+      }).filter(row => row.time && !Number.isNaN(row.value));
+      return rows;
+    }
+
+    function renderTimeSeries(rows) {
+      const canvas = document.getElementById('timeSeriesChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (timeSeriesChart) timeSeriesChart.destroy();
+      timeSeriesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: rows.map(r => r.time),
+          datasets: [{
+            label: 'Time-Series Value',
+            data: rows.map(r => r.value),
+            borderColor: '#0f766e',
+            backgroundColor: 'rgba(245, 158, 11, 0.12)',
+            fill: true,
+            tension: 0.35,
+            pointRadius: 3,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true }, tooltip: { enabled: true } },
+          scales: { y: { beginAtZero: false }, x: { ticks: { maxRotation: 45, minRotation: 0 } } }
+        }
+      });
+    }
+
+    async function loadCsvFromUrl() {
+      const input = document.getElementById('csvUrlInput');
+      const url = input ? input.value.trim() : '';
+      if (!url) {
+        alert('Please paste a CSV URL first.');
+        return;
+      }
+      try {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) throw new Error('Could not load CSV file');
+        const csvText = await response.text();
+        const rows = parseCsvText(csvText);
+        if (!rows.length) throw new Error('No valid rows found');
+        renderTimeSeries(rows);
+      } catch (error) {
+        alert('CSV loading failed. Check sharing permission, CSV format, and CORS access.');
+        console.error(error);
+      }
+    }
+
+    function loadCsvFromFile(event) {
+      const file = event && event.target && event.target.files ? event.target.files[0] : null;
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => renderTimeSeries(parseCsvText(e.target.result));
+      reader.readAsText(file);
+    }
+
+    function useSampleTimeSeries() {
+      renderTimeSeries([
+        { time: '10:00', value: 42.5 },
+        { time: '10:05', value: 43.1 },
+        { time: '10:10', value: 44.0 },
+        { time: '10:15', value: 43.6 },
+        { time: '10:20', value: 45.2 },
+        { time: '10:25', value: 46.1 }
+      ]);
+    }
+
+    window.updateProfilePhoto = updateProfilePhoto;
+    window.resetProfilePhoto = resetProfilePhoto;
+    window.loadCsvFromUrl = loadCsvFromUrl;
+    window.loadCsvFromFile = loadCsvFromFile;
+    window.useSampleTimeSeries = useSampleTimeSeries;
+
+    console.assert(typeof window.updateProfilePhoto === 'function', 'updateProfilePhoto should be globally available');
+    console.assert(parseCsvText('time,value\n10:00,1\n10:05,2').length === 2, 'CSV parser should read two rows');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSavedProfilePhoto();
       loadDashboardData().then(data => {
         updateMetrics(data);
         updatePublicationList(data);
         renderChart(data);
+        useSampleTimeSeries();
       });
     });
   </script>
+</div>
 </body>
 </html>
