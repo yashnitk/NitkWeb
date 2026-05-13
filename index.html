@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Yashwant Kashyap | Research Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f5f7fb;color:#1f2937}
+.hero{background:linear-gradient(135deg,#001d3d,#003566,#0f766e);color:#fff;padding:40px 5vw}
+.hero-grid{display:grid;grid-template-columns:1.2fr .5fr .3fr;gap:20px;align-items:center;max-width:1300px;margin:auto}
+.profile-photo img{width:170px;height:170px;border-radius:50%;object-fit:cover;border:5px solid rgba(255,255,255,.5)}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;max-width:1300px;margin:20px auto;padding:0 20px}
+.metric,.card{background:#fff;padding:22px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.metric h2{margin:0;font-size:34px;color:#003566}
+.section{max-width:1300px;margin:20px auto;padding:0 20px}
+.flex{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pub{padding:12px 0;border-bottom:1px solid #eee}
+.tags span{display:inline-block;padding:8px 12px;background:rgba(255,255,255,.12);margin:6px;border-radius:999px}
+.upload-btn{background:rgba(255,255,255,.18);padding:8px 12px;border-radius:999px;display:inline-block;cursor:pointer;margin-top:10px}
+.upload-btn input{display:none}
+@media(max-width:900px){.hero-grid,.flex{grid-template-columns:1fr;text-align:center}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+<div class="hero-grid">
+<div>
+<h1>Dr. Yashwant Kashyap</h1>
+<p>Assistant Professor, Department of EEE, NITK Surathkal</p>
+<div class="tags">
+<span>AI for Energy</span>
+<span>Airborne Wind Energy</span>
+<span>EV Systems</span>
+<span>Smart Grid Analytics</span>
+</div>
+</div>
+
+<div>
+<p><b>Google Scholar:</b> <a style="color:#fff" href="https://scholar.google.com/citations?user=UGUSvEYAAAAJ&hl=en">Profile</a></p>
+<p><b>ORCID:</b> <a style="color:#fff" href="https://orcid.org/0000-0002-8425-7430">0000-0002-8425-7430</a></p>
+<p><b>Scopus:</b> <a style="color:#fff" href="https://www.scopus.com/authid/detail.uri?authorId=56650962000">56650962000</a></p>
+</div>
+
+<div class="profile-photo">
+<img id="profilePhoto" src="profile-photo.jpg">
+<label class="upload-btn">
+Change Photo
+<input type="file" accept="image/*" onchange="changePhoto(event)">
+</label>
+</div>
+</div>
+</header>
+
+<section class="metric-grid">
+<div class="metric"><h2>42</h2><p>Publications</p></div>
+<div class="metric"><h2>595</h2><p>Citations</p></div>
+<div class="metric"><h2>12</h2><p>h-index</p></div>
+<div class="metric"><h2>₹0.95 Cr</h2><p>Research Funding</p></div>
+</section>
+
+<section class="section">
+<div class="card">
+<h2>Publication Trend</h2>
+<canvas id="pubChart"></canvas>
+</div>
+
+<div class="flex">
+<div class="card">
+<h2>Selected Publications</h2>
+<div class="pub"><b>Multi-Layer Cloud Motion Vector Forecasting for Solar Energy Applications</b><br>Applied Energy, 2024</div>
+<div class="pub"><b>Ray-Tracing Modeling for Urban Photovoltaic Energy Planning and Management</b><br>Applied Energy, 2024</div>
+<div class="pub"><b>Laboratory-Scale Airborne Wind Energy Conversion Emulator Using OPAL-RT</b><br>Energies, 2023</div>
+<div class="pub"><b>Rooftop Photovoltaic Energy Production Estimations in India</b><br>Remote Sensing, 2023</div>
+</div>
+
+<div class="card">
+<h2>Courses Taught</h2>
+<p>
+EE276 – Digital Electronic Circuits<br>
+EE311 – Digital System Design<br>
+EE335 – Digital System Design Laboratory<br>
+EE319 – Neural Networks and Applications<br>
+EE432 – Introduction to Machine Learning<br>
+EE403 – Deep Neural Networks and Applications<br>
+EE404 – Soft Computing and Applications<br>
+EE853 – Renewable Energy Systems<br>
+EE917 – Electric Vehicle
+</p>
+</div>
+</div>
+
+<div class="card">
+<h2>Real-Time Time Series Data</h2>
+<input type="file" accept=".csv" onchange="loadCSV(event)">
+<canvas id="tsChart"></canvas>
+</div>
+</section>
+
+<script>
+new Chart(document.getElementById('pubChart'),{
+type:'line',
+data:{
+labels:['2018','2019','2020','2021','2022','2023','2024'],
+datasets:[{
+label:'Publications',
+data:[2,3,3,4,8,10,4],
+borderColor:'#003566'
+}]
+}
+});
+
+let tsChart;
+
+function changePhoto(event){
+const file=event.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=function(e){
+document.getElementById('profilePhoto').src=e.target.result;
+localStorage.setItem('profilePhoto',e.target.result);
+};
+reader.readAsDataURL(file);
+}
+
+window.onload=function(){
+const saved=localStorage.getItem('profilePhoto');
+if(saved){
+document.getElementById('profilePhoto').src=saved;
+}
+}
+
+function loadCSV(event){
+const file=event.target.files[0];
+if(!file)return;
+
+const reader=new FileReader();
+reader.onload=function(e){
+const rows=e.target.result.trim().split('\n');
+const labels=[];
+const values=[];
+
+for(let i=1;i<rows.length;i++){
+const p=rows[i].split(',');
+labels.push(p[0]);
+values.push(Number(p[1]));
+}
+
+renderTS(labels,values);
+};
+reader.readAsText(file);
+}
+
+function renderTS(labels,values){
+if(tsChart){tsChart.destroy();}
+tsChart=new Chart(document.getElementById('tsChart'),{
+type:'line',
+data:{
+labels:labels,
+datasets:[{
+label:'Time Series',
+data:values,
+borderColor:'#0f766e'
+}]
+}
+});
+}
+</script>
+
+</body>
+</html>
